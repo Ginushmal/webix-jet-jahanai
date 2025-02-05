@@ -1,6 +1,9 @@
 Webix Jet Demo App
 ===================
 
+### Deployed in 
+https://webix-jet-jahanai.vercel.app/#!/login
+
 ### How to run
 
 - run ```npm install```
