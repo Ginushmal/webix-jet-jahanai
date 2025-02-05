@@ -6,6 +6,10 @@ export const preferencesModel = {
   getAccountSettings: function () {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .get(this.apiServer + "/api/account/")
       .then((response) => response.json())
       .catch((error) => {
@@ -21,6 +25,10 @@ export const preferencesModel = {
   updateAccountSettings: function (data) {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .put(this.apiServer + "/api/account/", data)
       .then((response) => response.json())
       .catch((error) => {
@@ -36,6 +44,10 @@ export const preferencesModel = {
   getNotificationSettings: function () {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .get(this.apiServer + "/api/notifications/")
       .then((response) => response.json())
       .catch((error) => {
@@ -51,6 +63,10 @@ export const preferencesModel = {
   updateNotificationSettings: function (data) {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .put(this.apiServer + "/api/notifications/", data)
       .then((response) => response.json())
       .catch((error) => {
@@ -66,6 +82,10 @@ export const preferencesModel = {
   getThemeSettings: function () {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .get(this.apiServer + "/api/theme/")
       .then((response) => response.json())
       .catch((error) => {
@@ -78,6 +98,10 @@ export const preferencesModel = {
   updateThemeSettings: function (data) {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .put(this.apiServer + "/api/theme/", data)
       .then((response) => response.json())
       .catch((error) => {
@@ -93,6 +117,10 @@ export const preferencesModel = {
   getPrivacySettings: function () {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .get(this.apiServer + "/api/privacy/")
       .then((response) => response.json())
       .catch((error) => {
@@ -108,6 +136,10 @@ export const preferencesModel = {
   updatePrivacySettings: function (data) {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .put(this.apiServer + "/api/privacy/", data)
       .then((response) => response.json())
       .catch((error) => {

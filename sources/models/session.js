@@ -7,31 +7,45 @@ export const session = {
     this.apiServer = url;
   },
   login(user, pass) {
-    return webix
-      .ajax()
-      .post(
-        this.apiServer + "/api/login/",
-        { username: user, password: pass },
-        { withCredentials: true } // Ensure cookies are sent
-      )
+    return fetch(this.apiServer + "/api/login/", {
+      method: "POST",
+      body: JSON.stringify({ username: user, password: pass }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Ensure cookies are sent with the request
+    })
       .then((res) => {
-        const csrfToken = res.headers["X-CSRFToken"]; // Get CSRF token from response header
-        console.log("CSRF Token: ", csrfToken); // Log the token to verify it's working
+        // Log response headers to confirm if CSRF token is available
+        console.log("Response Headers:", res.headers);
+
+        // Get CSRF token from response headers
+        const csrfToken = res.headers.get("X-CSRFToken");
+        console.log("CSRF Token:", csrfToken);
+
         if (csrfToken) {
           localStorage.setItem("csrftoken", csrfToken); // Store CSRF token in localStorage
         }
+
         return res.json();
       })
       .then((data) => {
         if (data.message) {
-          webix.storage.local.put("user", data.user); // Store user info if login is successful
+          localStorage.setItem("user", JSON.stringify(data.user)); // Store user info if login is successful
         }
         return data;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   },
   logout() {
     return webix
       .ajax()
+      .headers({
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
+        "Content-Type": "application/json",
+      })
       .post(this.apiServer + "/api/logout/")
       .then((res) => res.json())
       .then(() => {
@@ -43,18 +57,13 @@ export const session = {
     return webix
       .ajax()
       .headers({
-        "X-CSRFToken": this.getCSRFToken(), // Ensure CSRF token is sent
+        "X-CSRFToken": localStorage.getItem("csrftoken"),
         "Content-Type": "application/json",
       })
       .post(this.apiServer + "/api/status/", null, {})
       .then((res) => res.json());
   },
 
-  getCSRFToken() {
-    console.log("Cookiess :", document.cookie);
-    const match = document.cookie.match(/csrftoken=([^;]+)/);
-    return match ? match[1] : "";
-  },
   getUser() {
     return webix.storage.local.get("user");
   },
