@@ -12,6 +12,11 @@ const locales = import.meta.glob("./locales/*.js");
 const words = (name) =>
   locales[`./locales/${name}.js`]().then((x) => x.default);
 
+// Attach global AJAX settings before app starts
+webix.attachEvent("onBeforeAjax", function (mode, url, data, request, headers) {
+  request.withCredentials = true;
+});
+
 export default class MyApp extends JetApp {
   constructor(config) {
     const defaults = {

@@ -12,17 +12,23 @@ export const session = {
       .post(
         this.apiServer + "/api/login/",
         { username: user, password: pass },
-        { withCredentials: true }
+        { withCredentials: true } // Ensure cookies are sent
       )
-      .then((res) => res.json())
+      .then((res) => {
+        const csrfToken = res.headers["X-CSRFToken"]; // Get CSRF token from response header
+        console.log("CSRF Token: ", csrfToken); // Log the token to verify it's working
+        if (csrfToken) {
+          localStorage.setItem("csrftoken", csrfToken); // Store CSRF token in localStorage
+        }
+        return res.json();
+      })
       .then((data) => {
         if (data.message) {
-          webix.storage.local.put("user", data.user);
+          webix.storage.local.put("user", data.user); // Store user info if login is successful
         }
         return data;
       });
   },
-
   logout() {
     return webix
       .ajax()
@@ -40,13 +46,12 @@ export const session = {
         "X-CSRFToken": this.getCSRFToken(), // Ensure CSRF token is sent
         "Content-Type": "application/json",
       })
-      .post(this.apiServer + "/api/status/", null, {
-        withCredentials: true, // Ensures cookies (sessionid, csrftoken) are sent
-      })
+      .post(this.apiServer + "/api/status/", null, {})
       .then((res) => res.json());
   },
 
   getCSRFToken() {
+    console.log("Cookiess :", document.cookie);
     const match = document.cookie.match(/csrftoken=([^;]+)/);
     return match ? match[1] : "";
   },
