@@ -1,0 +1,1 @@
+webix.protoUI({name:"photo",getValue(){return this.config.value},setValue(e){this.setHTML("<img style='height:260px;' webix_tooltip='The image of the Client' src='data/images/"+e+".jpg'>"),this.config.value=e}},webix.ui.template);
